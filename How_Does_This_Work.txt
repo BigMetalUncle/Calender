@@ -1,0 +1,72 @@
+
+    This is where I am going to write about how this thing works. 
+I am only focusing on the contents of calender-related-functions.c and it's header file and some of common.h
+The other files are just the code that makes use of this important file to make the software.
+You can also think of calender-related-functions as an API and you could change some stuff or 
+atleast understand how and why this works and use it in your own applications. 
+
+This project was fun and doesn't require any additional knowledge than some basic C knowledge.
+
+So MONTH and WEEKDAY types are obvious from the header file itself. 
+YEAR Was just a typedef and for readability. I could have done this with days... I will do that later. 
+
+LOGIC:
+------
+First of all is to understand the logic. 
+
+DATE_ID:
+-------
+        We somehow have to make a unique value from every date . That's where GetDateID function comes.
+It's nothing too complex. DateID is just a number representing how many days after 1-1-0000 to 
+the given dat DD-MM-YYYY. That's it ! My way of calculating might be ugly. Do your own way. 
+        That means 1-1-0000 would have an ID 1. We only ocnsider dates greater than 1-1-0000 in this project.
+Date 0-0-0000 is not logical.
+
+WEEKDAY AND WEEK_ORDER:
+-----------------------
+It is world knowledge that the weekdays go in a loop . I mean Sun -> Mon -> Tue -> ... -> Sat and back to 
+Sun and this cycle goes on . So any date must be one of these. 
+        Now , if we have a reference date ( a date whose true weekday is already known , by unknown means )
+we could calculate it's DateID. We know any number divided by 7 gives a remainder between 0 - 6 and all weekdays 
+can also be represented with the same range, ie. 0-6. Now you might have got the idea. 
+        Also , a weekday repeats after 6 days and on the 7th day, we can form a relation with "division with 7".
+On more thinking , we find all dates whose (DateID % 7) are equal have the same weekday. 
+        We can use this idea to form an array called WeekdayOrder whose index represents (DateID % 7) 
+and value represent the Weekday (Sun, Mon, Tue, ...). from the refernce, we can find the value for one index.
+Just using this single value, we can fill in the rest and complete the array. 
+        Now, if we have any date, we can get it's weekday form WeekdayOrder[DateID % 7]
+
+        Now, our universe or timeline doesn't change and each timeline has a fixed WeekdayOrder. 
+We know 01 Jan 2000 was a saturday in our timeline.  On calculation, we get our WeekdayOrder to be 
+[ Thu, Fri, Sat, Sun, Mon, Tue, Wed ].
+        This WeekdayOrder might be different for another timeline where 01 Jan 2000 was not a Saturday.
+Try calculating such an order for practice. (Take 01-01-2000 to be a Wednesday).
+        
+        Isn't this cool !!
+
+Now, the concept of WeekdayOrder should be clear.
+
+
+HOW IS A MONTH REPRESENTED AND STORED ?
+----------------------------------------
+        A month have atmost 31 days. A calender usually represents a month with 7 columns for 7 weekdays. 
+So We can use an array of size of a multiple of 7 close to 31 , which is 35 . 
+Now , this array[0] represents 1st sunday or any weekday that you wih to be the first column. 
+
+        First find the weekday of 1st day of the month and fill that index of the array as 1. Now just 
+continue till the last day of the month (ie. 31 for Jan, 28 feb, 30 for April, etc)
+        Note to include the exception of leap years where Feb has 29 days. 
+        
+
+CONCLUSION:
+-----------
+This was a fun project. I had to do a lot of thinking. No AI was used in this except for the strToLower() , 
+which I was lazy to build. But that's okay because I Feel so great and satisfied now. 
+
+Please tell any suggestions or improvements or new ideas and methods if you have any .
+Thank you for trying this program and reading this text. 
+
+Have a nice Day !
+
+
+
